@@ -1,0 +1,56 @@
+<div class="tabs">
+  <div class="tabs__list" role="tablist" aria-label="Información del producto">
+    @for (tab of tabs(); track tab.id) {
+      <button
+        type="button"
+        role="tab"
+        class="tabs__tab"
+        [id]="'tab-' + tab.id"
+        [class.tabs__tab--active]="active() === tab.id"
+        [attr.aria-selected]="active() === tab.id"
+        [attr.aria-controls]="'panel-' + tab.id"
+        (click)="active.set(tab.id)"
+      >
+        {{ tab.label }}
+      </button>
+    }
+  </div>
+
+  <div class="tabs__panel" role="tabpanel" [id]="'panel-' + active()" [attr.aria-labelledby]="'tab-' + active()">
+    @switch (active()) {
+      @case ('descripcion') {
+        <p class="tabs__text">{{ product().description }}</p>
+      }
+      @case ('especificaciones') {
+        <dl class="specs">
+          <div class="specs__row">
+            <dt>Condición</dt>
+            <dd>{{ product().condition }}</dd>
+          </div>
+          @for (spec of product().specs; track spec.label) {
+            <div class="specs__row">
+              <dt>{{ spec.label }}</dt>
+              <dd>{{ spec.value }}</dd>
+            </div>
+          }
+        </dl>
+      }
+      @case ('resenas') {
+        <ul class="reviews">
+          @for (review of reviews(); track review.id) {
+            <li class="reviews__item">
+              <div class="reviews__head">
+                <strong>{{ review.author }}</strong>
+                <span class="text-muted">{{ review.date | date: 'dd/MM/yyyy' }}</span>
+              </div>
+              <app-star-rating [rating]="review.rating" />
+              <p class="tabs__text">{{ review.comment }}</p>
+            </li>
+          } @empty {
+            <li class="text-muted">Este producto aún no tiene reseñas.</li>
+          }
+        </ul>
+      }
+    }
+  </div>
+</div>

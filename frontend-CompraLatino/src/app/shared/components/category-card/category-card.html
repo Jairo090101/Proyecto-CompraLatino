@@ -1,0 +1,18 @@
+<a
+  class="category-card"
+  routerLink="/catalogo"
+  [queryParams]="{ categoria: category().id }"
+  [attr.aria-label]="'Ver ' + category().name"
+>
+  <img
+    class="category-card__img"
+    appImgFallback
+    [src]="category().image"
+    [alt]="category().name"
+    loading="lazy"
+  />
+  <div class="category-card__overlay">
+    <h3 class="category-card__name">{{ category().name }}</h3>
+    <span class="category-card__count">{{ category().itemCount | number: '1.0-0' : 'en-US' }} artículos</span>
+  </div>
+</a>

@@ -1,0 +1,130 @@
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: calc(100vh - var(--navbar-height));
+  max-height: 820px;
+  padding-block: 4rem;
+  background:
+    linear-gradient(90deg, rgba(13, 18, 32, 0.95) 0%, rgba(13, 18, 32, 0.7) 50%, rgba(13, 18, 32, 0.35) 100%),
+    linear-gradient(to top, var(--color-bg) 0%, transparent 30%),
+    url('https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=1800&q=70&auto=format&fit=crop')
+      center / cover no-repeat,
+    var(--color-surface);
+}
+
+.hero__content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.hero__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  border: 1px solid rgba(232, 48, 74, 0.45);
+  border-radius: var(--radius-pill);
+  background: rgba(232, 48, 74, 0.12);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.hero__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  animation: pulse 1.8s ease-in-out infinite;
+}
+
+.hero__title {
+  max-width: 640px;
+  font-size: clamp(2.5rem, 7vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.hero__subtitle {
+  max-width: 520px;
+  color: #c9cfdc;
+  font-size: 1rem;
+}
+
+.hero__search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 560px;
+  padding: 0.4rem 0.4rem 0.4rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: rgba(21, 28, 46, 0.85);
+  backdrop-filter: blur(6px);
+}
+
+.hero__search:focus-within {
+  border-color: var(--color-primary);
+}
+
+.hero__search-icon {
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+}
+
+.hero__search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--color-text);
+}
+
+.hero__search input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.hero__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5rem;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hero__stats li {
+  display: flex;
+  flex-direction: column;
+}
+
+.hero__stats strong {
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.hero__stats span {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero {
+    min-height: auto;
+    padding-block: 3rem;
+  }
+
+  .hero__stats {
+    gap: 1.5rem;
+  }
+}

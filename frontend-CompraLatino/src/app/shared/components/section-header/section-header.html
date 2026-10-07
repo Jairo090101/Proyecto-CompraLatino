@@ -1,0 +1,12 @@
+<header class="section-header">
+  <div>
+    @if (eyebrow()) {
+      <span class="eyebrow">{{ eyebrow() }}</span>
+    }
+    <h2 class="section-header__title">{{ title() }}</h2>
+  </div>
+
+  @if (linkText() && linkUrl()) {
+    <a class="section-header__link" [routerLink]="linkUrl()">{{ linkText() }} &rarr;</a>
+  }
+</header>

@@ -1,0 +1,32 @@
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+}
+
+.rating--full {
+  gap: 0.6rem;
+  font-size: 0.875rem;
+}
+
+.rating__stars {
+  display: inline-flex;
+  gap: 1px;
+}
+
+.rating__star {
+  color: #f5a623;
+}
+
+.rating__star--empty {
+  color: #3a4258;
+}
+
+.rating__value {
+  font-weight: 600;
+}
+
+.rating__count {
+  color: var(--color-text-muted);
+}

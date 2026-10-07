@@ -1,0 +1,25 @@
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.8rem;
+  color: var(--color-text);
+}
+
+.breadcrumb__item:not(:last-child)::after {
+  content: '/';
+  margin-left: 0.4rem;
+  color: var(--color-text-muted);
+}
+
+.breadcrumb__link {
+  color: var(--color-text-muted);
+  transition: color var(--transition);
+}
+
+.breadcrumb__link:hover {
+  color: var(--color-primary);
+}

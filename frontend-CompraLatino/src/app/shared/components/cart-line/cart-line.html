@@ -1,0 +1,22 @@
+<article class="line">
+  <img class="line__img" appImgFallback [src]="item().image" [alt]="item().name" />
+
+  <div class="line__info">
+    <h3 class="line__name">{{ item().name }}</h3>
+    <span class="line__qty">Cant: {{ item().quantity }}</span>
+    <span class="line__price">{{ item().priceUsd * item().quantity | currency: 'USD' : 'symbol' : '1.0-2' }} USD</span>
+  </div>
+
+  @if (removable()) {
+    <button
+      type="button"
+      class="line__remove"
+      [attr.aria-label]="'Eliminar ' + item().name + ' del carrito'"
+      (click)="remove.emit(item().productId)"
+    >
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6" />
+      </svg>
+    </button>
+  }
+</article>

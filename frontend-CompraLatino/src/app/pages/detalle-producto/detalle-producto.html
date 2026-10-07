@@ -1,0 +1,108 @@
+@if (product(); as product) {
+  <div class="container detail">
+    <app-breadcrumb class="detail__breadcrumb" [items]="breadcrumb()" />
+
+    <div class="detail__layout">
+      <app-product-gallery [images]="images()" [alt]="product.name" />
+
+      <div class="detail__info">
+        <div class="detail__tags">
+          @if (product.badge) {
+            <span class="detail__badge">{{ product.badge }}</span>
+          }
+          <span class="text-muted">{{ product.category.name }}</span>
+        </div>
+
+        <h1 class="detail__title">{{ product.name }}</h1>
+        <app-star-rating [rating]="product.rating" [count]="product.reviewCount" />
+
+        <app-price-summary
+          [price]="product.priceUsd"
+          [originalPrice]="product.originalPriceUsd"
+          [quantity]="quantity()"
+        />
+
+        <div class="detail__qty">
+          <span class="text-muted">Cantidad:</span>
+          <app-quantity-stepper [(value)]="quantity" [disabled]="soldOut()" />
+        </div>
+
+        <div class="detail__actions">
+          <button
+            type="button"
+            class="btn btn-primary detail__add"
+            [class.detail__add--done]="justAdded()"
+            [disabled]="soldOut()"
+            (click)="addToCart()"
+          >
+            @if (soldOut()) {
+              Producto agotado
+            } @else if (justAdded()) {
+              Agregado al carrito
+            } @else {
+              Agregar al carrito
+            }
+          </button>
+          <button
+            type="button"
+            class="icon-btn detail__fav"
+            [class.detail__fav--on]="favorite()"
+            [attr.aria-pressed]="favorite()"
+            aria-label="Agregar a favoritos"
+            (click)="toggleFavorite()"
+          >
+            <svg viewBox="0 0 24 24" width="20" height="20" [attr.fill]="favorite() ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 21s-7.5-4.6-9.5-9.2C1 8.2 3.4 4.5 7 4.5c2 0 3.5 1.1 5 3 1.5-1.9 3-3 5-3 3.6 0 6 3.7 4.5 7.3C19.5 16.4 12 21 12 21z" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="surface detail__seller">
+          <span class="detail__avatar" aria-hidden="true">{{ product.seller.name.charAt(0) }}</span>
+          <div>
+            <span class="detail__seller-label">Vendedor en YAuctions Japan</span>
+            <strong class="detail__seller-name">{{ product.seller.name }}</strong>
+            <span class="detail__seller-meta">
+              &#9733; {{ product.seller.rating | number: '1.1-1' }} &middot;
+              {{ product.seller.sales | number: '1.0-0' : 'en-US' }} ventas en YAuctions
+            </span>
+          </div>
+        </div>
+
+        <ul class="detail__trust">
+          <li>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></svg>
+            Compra segura
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M2 12l20-9-6 18-4-7-10-2z" /></svg>
+            Envío desde Japón
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6l8-3z" /><path d="m9 12 2 2 4-4" /></svg>
+            Garantía 30 días
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <app-product-tabs class="detail__tabs" [product]="product" [reviews]="reviews()" />
+
+    @if (related().length) {
+      <section class="detail__related">
+        <app-section-header title="También te puede interesar" />
+        <div class="detail__related-grid">
+          @for (item of related(); track item.id) {
+            <app-product-card [product]="item" />
+          }
+        </div>
+      </section>
+    }
+  </div>
+} @else {
+  <div class="container detail__missing">
+    <h1>Producto no encontrado</h1>
+    <p class="text-muted">El producto que buscas no existe o ya no está disponible.</p>
+    <a class="btn btn-primary" routerLink="/catalogo">Volver al catálogo</a>
+  </div>
+}

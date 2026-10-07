@@ -1,0 +1,17 @@
+<span class="rating" [class.rating--full]="!compact()" [attr.aria-label]="'Calificación ' + rating() + ' de 5'">
+  @if (compact()) {
+    <span class="rating__star">&#9733;</span>
+  } @else {
+    <span class="rating__stars" aria-hidden="true">
+      @for (filled of stars(); track $index) {
+        <span class="rating__star" [class.rating__star--empty]="!filled">&#9733;</span>
+      }
+    </span>
+  }
+
+  <span class="rating__value">{{ rating() | number: '1.1-1' }}</span>
+
+  @if (count() !== null) {
+    <span class="rating__count">({{ count() }}{{ compact() ? '' : ' reseñas' }})</span>
+  }
+</span>

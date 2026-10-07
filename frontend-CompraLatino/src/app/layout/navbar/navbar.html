@@ -1,0 +1,54 @@
+<nav class="navbar" aria-label="Navegación principal">
+  <div class="container navbar__inner">
+    <a class="navbar__brand" routerLink="/" (click)="closeMenu()">
+      Compra<span class="text-primary">Latino</span>
+      <span class="navbar__tag">JP</span>
+    </a>
+
+    <ul class="navbar__links" [class.navbar__links--open]="menuOpen()">
+      @for (link of links; track link.path) {
+        <li>
+          <a
+            class="navbar__link"
+            [routerLink]="link.path"
+            routerLinkActive="navbar__link--active"
+            [routerLinkActiveOptions]="{ exact: !!link.exact }"
+            (click)="closeMenu()"
+          >
+            {{ link.label }}
+          </a>
+        </li>
+      }
+    </ul>
+
+    <div class="navbar__actions">
+      <button
+        type="button"
+        class="navbar__icon"
+        aria-haspopup="dialog"
+        [attr.aria-label]="'Abrir carrito, ' + cartCount() + ' artículos'"
+        (click)="openCart()"
+      >
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="9" cy="21" r="1" />
+          <circle cx="20" cy="21" r="1" />
+          <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" />
+        </svg>
+        @if (cartCount()) {
+          <span class="navbar__count">{{ cartCount() > 99 ? '99+' : cartCount() }}</span>
+        }
+      </button>
+      <a class="btn btn-primary navbar__login" routerLink="/login" (click)="closeMenu()">Ingresar</a>
+
+      <button
+        type="button"
+        class="navbar__toggle"
+        [attr.aria-expanded]="menuOpen()"
+        aria-label="Abrir menú"
+        (click)="toggleMenu()"
+      >
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>

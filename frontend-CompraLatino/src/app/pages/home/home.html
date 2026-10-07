@@ -1,0 +1,37 @@
+<app-hero-search [stats]="stats()" (search)="onSearch($event)" />
+
+<section class="section">
+  <div class="container">
+    <app-section-header
+      eyebrow="Categorías"
+      title="Explora por tipo"
+      linkText="Ver catálogo completo"
+      linkUrl="/catalogo"
+    />
+
+    <div class="home__categories">
+      @for (category of categories(); track category.id) {
+        <app-category-card [category]="category" />
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section home__featured">
+  <div class="container">
+    <app-section-header
+      eyebrow="Destacados"
+      title="Los más populares"
+      linkText="Ver todos"
+      linkUrl="/catalogo"
+    />
+
+    <div class="home__products">
+      @for (product of featured(); track product.id) {
+        <app-product-card [product]="product" />
+      } @empty {
+        <p class="text-muted">No hay productos destacados por el momento.</p>
+      }
+    </div>
+  </div>
+</section>

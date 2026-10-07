@@ -1,0 +1,110 @@
+<div class="toolbar">
+  <div class="toolbar__search">
+    <svg class="toolbar__search-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <circle cx="11" cy="11" r="7" />
+      <path d="m20 20-3.5-3.5" />
+    </svg>
+    <label class="visually-hidden" for="catalog-search">Buscar productos</label>
+    <input
+      id="catalog-search"
+      class="form-control"
+      type="search"
+      placeholder="Buscar productos..."
+      autocomplete="off"
+      [ngModel]="search()"
+      (ngModelChange)="search.set($event)"
+    />
+  </div>
+
+  <label class="visually-hidden" for="catalog-sort">Ordenar por</label>
+  <select
+    id="catalog-sort"
+    class="form-control toolbar__sort"
+    [ngModel]="sort()"
+    (ngModelChange)="sort.set($event)"
+  >
+    @for (option of sortOptions; track option.value) {
+      <option [value]="option.value">{{ option.label }}</option>
+    }
+  </select>
+
+  <div class="toolbar__views" role="group" aria-label="Tipo de vista">
+    <button
+      type="button"
+      class="icon-btn"
+      [class.icon-btn--active]="view() === 'grid'"
+      [attr.aria-pressed]="view() === 'grid'"
+      aria-label="Vista en cuadrícula"
+      (click)="view.set('grid')"
+    >
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+        <rect x="3" y="3" width="8" height="8" rx="1.5" />
+        <rect x="13" y="3" width="8" height="8" rx="1.5" />
+        <rect x="3" y="13" width="8" height="8" rx="1.5" />
+        <rect x="13" y="13" width="8" height="8" rx="1.5" />
+      </svg>
+    </button>
+    <button
+      type="button"
+      class="icon-btn"
+      [class.icon-btn--active]="view() === 'list'"
+      [attr.aria-pressed]="view() === 'list'"
+      aria-label="Vista en lista"
+      (click)="view.set('list')"
+    >
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+        <path d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+  </div>
+
+  <button
+    type="button"
+    class="btn btn-outline toolbar__filters-btn"
+    [attr.aria-expanded]="filtersOpen()"
+    aria-controls="catalog-filters"
+    (click)="toggleFilters()"
+  >
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true">
+      <path d="M3 4h18l-7 8.5V19l-4 2v-8.5L3 4z" />
+    </svg>
+    Filtros
+    @if (activeFilters()) {
+      <span class="badge">{{ activeFilters() }}</span>
+    }
+  </button>
+</div>
+
+@if (filtersOpen()) {
+  <div id="catalog-filters" class="surface filters">
+    <div class="filters__field">
+      <label for="min-price">Precio mínimo (USD)</label>
+      <input
+        id="min-price"
+        class="form-control"
+        type="number"
+        min="0"
+        placeholder="0"
+        [ngModel]="minPrice()"
+        (ngModelChange)="minPrice.set(toPrice($event))"
+      />
+    </div>
+    <div class="filters__field">
+      <label for="max-price">Precio máximo (USD)</label>
+      <input
+        id="max-price"
+        class="form-control"
+        type="number"
+        min="0"
+        placeholder="Sin límite"
+        [ngModel]="maxPrice()"
+        (ngModelChange)="maxPrice.set(toPrice($event))"
+      />
+    </div>
+    <label class="filters__check">
+      <input type="checkbox" [ngModel]="onlyAvailable()" (ngModelChange)="onlyAvailable.set($event)" />
+      Solo disponibles
+    </label>
+    <button type="button" class="btn btn-outline" (click)="clearFilters.emit()">Limpiar filtros</button>
+  </div>
+}

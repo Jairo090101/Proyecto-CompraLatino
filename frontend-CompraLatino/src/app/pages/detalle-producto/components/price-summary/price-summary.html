@@ -1,0 +1,24 @@
+<div class="surface price">
+  <div class="price__head">
+    <span class="price__current">{{ price() | currency: 'USD' : 'symbol' : '1.0-0' }}</span>
+    @if (originalPrice() && discount()) {
+      <span class="price__old">{{ originalPrice() | currency: 'USD' : 'symbol' : '1.0-0' }}</span>
+      <span class="price__discount">-{{ discount() }}% OFF</span>
+    }
+  </div>
+
+  <dl class="price__rows">
+    <div class="price__row">
+      <dt>Precio en YAuctions Japan{{ quantity() > 1 ? ' (x' + quantity() + ')' : '' }}</dt>
+      <dd>{{ breakdown().base | currency: 'USD' : 'symbol' : '1.2-2' }} USD</dd>
+    </div>
+    <div class="price__row">
+      <dt>Comisión intermediario ({{ commissionPercent }}%)</dt>
+      <dd class="price__commission">+{{ breakdown().commission | currency: 'USD' : 'symbol' : '1.2-2' }} USD</dd>
+    </div>
+    <div class="price__row price__row--total">
+      <dt>Total a pagar</dt>
+      <dd>{{ breakdown().total | currency: 'USD' : 'symbol' : '1.2-2' }} USD</dd>
+    </div>
+  </dl>
+</div>

@@ -1,0 +1,83 @@
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.toolbar__search {
+  position: relative;
+  flex: 1 1 280px;
+}
+
+.toolbar__search .form-control {
+  padding-left: 2.4rem;
+}
+
+.toolbar__search-icon {
+  position: absolute;
+  top: 50%;
+  left: 0.9rem;
+  color: var(--color-text-muted);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.toolbar__sort {
+  flex: 0 0 200px;
+}
+
+.toolbar__views {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.toolbar__filters-btn {
+  height: 44px;
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  align-items: end;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  padding: 1rem;
+  animation: slide-down 0.2s ease;
+}
+
+.filters__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.filters__check {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 44px;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.filters__check input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-primary);
+}
+
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@media (max-width: 600px) {
+  .toolbar__sort {
+    flex: 1 1 auto;
+  }
+}

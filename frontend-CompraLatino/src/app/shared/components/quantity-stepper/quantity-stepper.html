@@ -1,0 +1,21 @@
+<div class="stepper" role="group" aria-label="Cantidad">
+  <button
+    type="button"
+    class="stepper__btn"
+    aria-label="Disminuir cantidad"
+    [disabled]="disabled() || value() <= min()"
+    (click)="decrease()"
+  >
+    &minus;
+  </button>
+  <span class="stepper__value" aria-live="polite">{{ value() }}</span>
+  <button
+    type="button"
+    class="stepper__btn"
+    aria-label="Aumentar cantidad"
+    [disabled]="disabled() || value() >= max()"
+    (click)="increase()"
+  >
+    +
+  </button>
+</div>
