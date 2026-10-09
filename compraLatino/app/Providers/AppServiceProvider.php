@@ -19,6 +19,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Forzar https en entornos que no sean locales
+        if (app()->environment('production') || app()->isProduction()) {
+            URL::forceScheme('https');
+        }
     }
 }
