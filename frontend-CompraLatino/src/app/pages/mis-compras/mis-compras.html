@@ -5,26 +5,26 @@
       <h1>Mis compras</h1>
       <p>Consulta el estado de tus pedidos enviados desde Japón.</p>
     </div>
-    @if (!loading && !error) {
-      <span class="purchases__count">{{ data.length }} {{ data.length === 1 ? 'pedido' : 'pedidos' }}</span>
+    @if (!loading() && !error()) {
+      <span class="purchases__count">{{ data().length }} {{ data().length === 1 ? 'pedido' : 'pedidos' }}</span>
     }
   </header>
 
-  @if (loading) {
+  @if (loading()) {
     <div class="purchases__loading" aria-label="Cargando compras">
       @for (placeholder of [1, 2]; track placeholder) {
         <div class="purchase-card purchase-card--skeleton"></div>
       }
     </div>
-  } @else if (error) {
+  } @else if (error()) {
     <section class="purchases__empty surface">
       <h2>No pudimos cargar tus compras</h2>
-      <p class="text-muted">{{ error }}</p>
+      <p class="text-muted">{{ error() }}</p>
       <button class="btn btn-primary" type="button" (click)="load()">Reintentar</button>
     </section>
-  } @else if (data.length) {
+  } @else if (data().length) {
     <div class="purchases__list">
-      @for (order of data; track order.id) {
+      @for (order of data(); track order.id) {
         <article class="purchase-card surface" [class.purchase-card--highlight]="order.id === highlightedId">
           <header class="purchase-card__header">
             <div>
