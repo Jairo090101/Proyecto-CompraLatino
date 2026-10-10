@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { MainLayout } from './layout/main-layout/main-layout';
-import { authGuard, guestGuard } from './services/auth.guards';
+import { adminGuard, authGuard, guestGuard } from './services/auth.guards';
 
 export const routes: Routes = [
   {
@@ -30,6 +30,7 @@ export const routes: Routes = [
   { path: 'registro', canActivate: [guestGuard], loadComponent: () => import('./pages/registro/registro').then((m) => m.Registro) },
   { path: 'confirmacion', canActivate: [authGuard], loadComponent: () => import('./pages/confirmacion/confirmacion').then((m) => m.Confirmacion) },
   { path: 'mis-compras', canActivate: [authGuard], loadComponent: () => import('./pages/mis-compras/mis-compras').then((m) => m.MisCompras) },
+  { path: 'admin', canActivate: [authGuard, adminGuard], loadComponent: () => import('./pages/admin/admin').then((m) => m.Admin) },
   // Screens not implemented yet fall back to the home page.
   { path: '**', redirectTo: '' },
 ];

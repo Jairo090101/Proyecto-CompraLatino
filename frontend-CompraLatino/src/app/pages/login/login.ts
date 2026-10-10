@@ -1,8 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
 import { AuthService } from '../../services/auth.service';
+import { apiErrorMessage, apiFieldErrors } from '../../services/api-error';
 
 @Component({
   selector: 'app-login',
@@ -17,13 +18,22 @@ export class Login {
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required],
   });
-  error = '';
+  readonly error = signal('');
+  readonly fieldErrors = signal<Record<string, string>>({});
+  readonly loading = signal(false);
   submit(): void {
-    if (this.form.invalid) { this.form.markAllAsTouched(); return; }
-    this.error = '';
+    if (this.form.invalid || this.loading()) { this.form.markAllAsTouched(); return; }
+    this.error.set('');
+    this.fieldErrors.set({});
+    this.loading.set(true);
     this.auth.login(this.form.getRawValue()).subscribe({
       next: () => this.router.navigateByUrl('/'),
-      error: (error) => { this.error = error.error?.errors?.email?.[0] ?? 'No se pudo iniciar sesión.'; },
+      error: (error) => {
+        this.fieldErrors.set(apiFieldErrors(error));
+        this.error.set(apiErrorMessage(error, 'No se pudo iniciar sesión.'));
+        this.loading.set(false);
+      },
+      complete: () => this.loading.set(false),
     });
   }
 }

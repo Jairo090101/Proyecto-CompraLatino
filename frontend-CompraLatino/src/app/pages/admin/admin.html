@@ -1,0 +1,63 @@
+<main class="admin-page">
+  <header class="admin-header">
+    <div><span class="eyebrow">Administración</span><h1>Panel de control</h1></div>
+    <div class="tabs">
+      <button class="chip" [class.chip--active]="tab() === 'dashboard'" (click)="setTab('dashboard')">Dashboard</button>
+      <button class="chip" [class.chip--active]="tab() === 'products'" (click)="setTab('products')">Productos</button>
+    </div>
+  </header>
+
+  @if (error()) { <div class="alert error" role="alert">{{ error() }}</div> }
+  @if (saved()) { <div class="alert success" role="status">{{ saved() }}</div> }
+
+  @if (tab() === 'dashboard') {
+    @if (metrics(); as data) {
+      <section class="kpis">
+        <article class="surface kpi"><span>Ventas</span><strong>${{ data.totals.sales | number:'1.2-2' }}</strong></article>
+        <article class="surface kpi"><span>Pedidos</span><strong>{{ data.totals.orders }}</strong></article>
+        <article class="surface kpi"><span>Clientes</span><strong>{{ data.totals.customers }}</strong></article>
+        <article class="surface kpi"><span>Productos</span><strong>{{ data.totals.products }}</strong></article>
+      </section>
+      <section class="dashboard-grid">
+        <article class="surface panel"><h2>Ventas por día</h2>
+          @for (day of data.sales_by_day; track day.date) {
+            <div class="bar-row"><span>{{ day.date }}</span><div class="bar"><i [style.width.%]="data.totals.sales ? day.total / data.totals.sales * 100 : 0"></i></div><b>${{ day.total | number:'1.0-0' }}</b></div>
+          } @empty { <p class="muted">Aún no hay ventas.</p> }
+        </article>
+        <article class="surface panel"><h2>Pedidos por estado</h2>
+          @for (status of data.orders_by_status; track status.status) { <div class="stat-row"><span>{{ status.status }}</span><strong>{{ status.count }}</strong></div> }
+        </article>
+        <article class="surface panel"><h2>Productos más vendidos</h2>
+          @for (product of data.top_products; track product.product_name) { <div class="stat-row"><span>{{ product.product_name }}</span><strong>{{ product.quantity }}</strong></div> }
+        </article>
+      </section>
+    } @else { <p class="muted">Cargando métricas...</p> }
+  } @else {
+    <section class="admin-content">
+      <article class="surface panel">
+        <div class="panel-heading"><h2>{{ editing() ? 'Editar producto' : 'Agregar producto' }}</h2>@if (editing()) { <button class="btn btn-outline" (click)="cancelEdit()">Cancelar</button> }</div>
+        <form [formGroup]="form" (ngSubmit)="save()" class="product-form">
+          <label>Nombre<input class="form-control" formControlName="name"></label>
+          <label>Categoría<select class="form-control" formControlName="category_id"><option value="">Selecciona</option>@for (category of categories(); track category.id) { <option [value]="category.id">{{ category.name }}</option> }</select></label>
+          <label>Descripción<textarea class="form-control" formControlName="description"></textarea></label>
+          <label>Precio USD<input class="form-control" type="number" formControlName="price_usd"></label>
+          <label>Precio anterior<input class="form-control" type="number" formControlName="original_price_usd"></label>
+          <label>Estado<select class="form-control" formControlName="status"><option value="disponible">Disponible</option><option value="subasta">Subasta</option><option value="agotado">Agotado</option></select></label>
+          <label>Imagen URL<input class="form-control" type="url" formControlName="image"></label>
+          <label>Condición<input class="form-control" formControlName="condition"></label>
+          <label>ID YAuctions<input class="form-control" formControlName="yauctions_item_id"></label>
+          <label class="check"><input type="checkbox" formControlName="featured"> Destacado</label>
+          <button class="btn btn-primary" type="submit">{{ editing() ? 'Guardar cambios' : 'Agregar producto' }}</button>
+        </form>
+      </article>
+      <article class="surface panel">
+        <div class="panel-heading"><h2>Catálogo</h2><input class="form-control search" placeholder="Buscar..." #query (input)="searchProducts(query.value)"></div>
+        <div class="product-list">
+          @for (product of products(); track product.id) {
+            <div class="product-row"><div><strong>{{ product.name }}</strong><small>{{ product.category.name }} · ${{ product.price_usd }}</small></div><div class="row-actions"><button class="btn btn-outline" (click)="edit(product)">Editar</button><button class="btn danger" (click)="remove(product)">Eliminar</button></div></div>
+          } @empty { <p class="muted">No hay productos.</p> }
+        </div>
+      </article>
+    </section>
+  }
+</main>

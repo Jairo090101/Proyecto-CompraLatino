@@ -7,6 +7,7 @@
 - Migraciones/seeders de usuarios, categorías, productos, pedidos y líneas.
 - Endpoints públicos de catálogo y privados de pedidos.
 - Recomendaciones por historial y métricas administrativas.
+- CRUD administrativo de productos protegido por rol `admin`, con validación, paginación y protección contra eliminar productos vendidos.
 - Gateway YAuctions desacoplado mediante interfaz y fake local.
 
 ## Decisiones

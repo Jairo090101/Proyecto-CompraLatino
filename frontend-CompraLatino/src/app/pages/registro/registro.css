@@ -1,5 +1,6 @@
 .auth-page { min-height: 70vh; display: grid; place-items: center; padding: 3rem 1rem; }
-.auth-card { display: grid; gap: 1rem; width: min(100%, 28rem); padding: 2rem; border: 1px solid #ddd; border-radius: 1rem; }
+.auth-card { display: grid; gap: 1rem; width: min(100%, 28rem); padding: 2rem; border: 1px solid var(--color-border); border-radius: 1rem; background: var(--color-surface); }
 .auth-card label { display: grid; gap: .35rem; }
-.auth-card input { padding: .7rem; border: 1px solid #bbb; border-radius: .4rem; }
-.error { color: #a00; }
+.auth-card input { padding: .7rem; border: 1px solid var(--color-border); border-radius: .4rem; background: var(--color-surface-2); color: var(--color-text); }
+.error, .field-error { color: #ff8292; }
+.auth-card button:disabled { opacity: .6; cursor: wait; }
