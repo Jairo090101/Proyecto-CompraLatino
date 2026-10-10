@@ -22,7 +22,7 @@ export class Navbar {
   protected readonly links: NavLink[] = [
     { label: 'Inicio', path: '/', exact: true },
     { label: 'Catálogo', path: '/catalogo' },
-    { label: 'Mis Compras', path: '/historial' },
+    { label: 'Mis Compras', path: '/mis-compras' },
     { label: 'Admin', path: '/admin' },
   ];
 
