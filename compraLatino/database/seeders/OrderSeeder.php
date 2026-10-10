@@ -11,6 +11,10 @@ class OrderSeeder extends Seeder
 {
     public function run(): void
     {
+        if (Order::where('idempotency_key', 'seed-demo-order')->exists()) {
+            return;
+        }
+
         $customer = User::where('role', 'customer')->first();
         $products = Product::limit(2)->get();
 
