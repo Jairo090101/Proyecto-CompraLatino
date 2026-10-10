@@ -2,12 +2,24 @@
   <form class="auth-card" [formGroup]="form" (ngSubmit)="submit()">
     <h1>Crear cuenta</h1>
     <p>Regístrate para guardar tus compras y recomendaciones.</p>
-    @if (error) { <div class="error">{{ error }}</div> }
+    @if (error()) { <div class="error" role="alert">{{ error() }}</div> }
     <label>Nombre<input formControlName="name" autocomplete="name"></label>
+    @if (form.controls.name.touched && form.controls.name.invalid) { <small class="field-error">El nombre es obligatorio.</small> }
     <label>Correo<input type="email" formControlName="email" autocomplete="email"></label>
+    @if (form.controls.email.touched && form.controls.email.invalid) { <small class="field-error">Ingresa un correo válido.</small> }
     <label>Contraseña<input type="password" formControlName="password" autocomplete="new-password"></label>
+    @if (form.controls.password.touched && form.controls.password.hasError('minlength')) { <small class="field-error">Usa al menos 8 caracteres.</small> }
+    @if (form.controls.password.touched && form.controls.password.hasError('pattern')) { <small class="field-error">Incluye letras y números.</small> }
     <label>Confirmar contraseña<input type="password" formControlName="password_confirmation" autocomplete="new-password"></label>
-    <button class="btn btn-primary" type="submit">Registrarme</button>
+    @if (form.controls.password_confirmation.touched && form.controls.password_confirmation.value !== form.controls.password.value) {
+      <small class="field-error">Las contraseñas no coinciden.</small>
+    }
+    @for (field of ['name', 'email', 'password', 'password_confirmation']; track field) {
+      @if (fieldErrors()[field]) { <small class="field-error">{{ fieldErrors()[field] }}</small> }
+    }
+    <button class="btn btn-primary" type="submit" [disabled]="loading()">
+      {{ loading() ? 'Creando cuenta...' : 'Registrarme' }}
+    </button>
     <a routerLink="/login">Ya tengo una cuenta</a>
   </form>
 </main>

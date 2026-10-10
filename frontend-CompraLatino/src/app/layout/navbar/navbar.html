@@ -19,6 +19,9 @@
           </a>
         </li>
       }
+      @if (auth.isAdmin()) {
+        <li><a class="navbar__link" [routerLink]="adminLink.path" routerLinkActive="navbar__link--active" (click)="closeMenu()">{{ adminLink.label }}</a></li>
+      }
     </ul>
 
     <div class="navbar__actions">

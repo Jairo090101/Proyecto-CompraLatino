@@ -1,6 +1,6 @@
 import { Injectable, computed, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, map, of, tap } from 'rxjs';
+import { Observable, catchError, map, of, shareReplay, tap } from 'rxjs';
 
 import { User } from '../models/user.model';
 
@@ -13,9 +13,12 @@ interface AuthResponse { user: User; token: string; token_type: string; }
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly userState = signal<User | null>(null);
+  private readonly sessionReadyState = signal(false);
+  private restoreRequest?: Observable<User | null>;
   readonly user = this.userState.asReadonly();
   readonly isLoggedIn = computed(() => this.userState() !== null);
   readonly isAdmin = computed(() => this.userState()?.role === 'admin');
+  readonly sessionReady = this.sessionReadyState.asReadonly();
 
   constructor(private readonly http: HttpClient) {}
 
@@ -28,13 +31,27 @@ export class AuthService {
   }
 
   restoreSession(): Observable<User | null> {
+    if (this.sessionReadyState()) return of(this.userState());
+    if (this.restoreRequest) return this.restoreRequest;
+
     const token = this.token();
-    if (!token) return of(null);
-    return this.http.get<{ data: User }>(`${API_URL}/auth/me`).pipe(
+    if (!token) {
+      this.sessionReadyState.set(true);
+      return of(null);
+    }
+
+    this.restoreRequest = this.http.get<{ data: User }>(`${API_URL}/auth/me`).pipe(
       tap((response) => this.userState.set(response.data)),
       map((response) => response.data),
       catchError(() => { this.clear(); return of(null); }),
+      tap({ complete: () => this.sessionReadyState.set(true) }),
+      shareReplay({ bufferSize: 1, refCount: false }),
     );
+    return this.restoreRequest;
+  }
+
+  ensureSessionReady(): Observable<User | null> {
+    return this.restoreSession();
   }
 
   logout(): Observable<unknown> {

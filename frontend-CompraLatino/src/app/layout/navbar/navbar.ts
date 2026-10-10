@@ -23,7 +23,6 @@ export class Navbar {
     { label: 'Inicio', path: '/', exact: true },
     { label: 'Catálogo', path: '/catalogo' },
     { label: 'Mis Compras', path: '/mis-compras' },
-    { label: 'Admin', path: '/admin' },
   ];
 
   private readonly cartDrawer = inject(CartDrawerService);
@@ -31,6 +30,7 @@ export class Navbar {
   protected readonly cartCount = inject(CartService).count;
   protected readonly menuOpen = signal(false);
   protected readonly auth = inject(AuthService);
+  protected readonly adminLink: NavLink = { label: 'Admin', path: '/admin' };
 
   openCart(): void {
     this.closeMenu();

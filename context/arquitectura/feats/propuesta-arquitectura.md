@@ -25,7 +25,7 @@ flowchart LR
 | Buscar y comprar desde varios dispositivos | SPA responsive, API paginada y token Bearer; el precio se recalcula en servidor. |
 | Ejecutar compras con YAuctions | `YAuctionsGateway`, una interfaz que desacopla pedidos del proveedor externo. |
 | Ofrecer productos por historial | `GET /api/recommendations`, agrupando categorías compradas y excluyendo artículos adquiridos. |
-| Administración y monitoreo | roles `customer/admin` y `GET /api/admin/metrics`. |
+| Administración y monitoreo | roles `customer/admin`, dashboard y CRUD de productos en `/admin`, además de `GET /api/admin/metrics`. |
 
 ## Seguridad y datos
 
@@ -35,5 +35,5 @@ Las rutas privadas usan `auth:sanctum`; las administrativas usan además `role:a
 
 - SQLite queda para desarrollo; producción debe usar PostgreSQL o MySQL.
 - El gateway actual es `FakeYAuctionsGateway`; no se deben enviar credenciales desde Angular.
-- Faltan pago real, verificación de correo, recuperación de contraseña y un panel administrativo visual.
+- Faltan pago real, verificación de correo y recuperación de contraseña.
 - Las observaciones del docente deben agregarse aquí sin borrar las versiones anteriores.

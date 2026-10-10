@@ -34,6 +34,8 @@ Para una primera entrega, PostgreSQL con un job ETL programado es suficiente. Me
 4. **Operación YAuctions:** pedidos por estado, fallas del gateway, tiempo pendiente y referencias externas.
 5. **Recomendaciones:** categorías dominantes, productos sugeridos y compras posteriores a una recomendación.
 
+La primera versión implementa el prototipo del panel ejecutivo en `/admin`: tarjetas de ventas, pedidos, clientes y productos; además de ventas por día, estados de pedidos y productos más vendidos. El mismo panel incorpora la vista operativa del catálogo.
+
 ## Conclusiones y recomendaciones
 
 La base transaccional ya conserva el precio congelado y el historial necesario para análisis. Se recomienda no consultar el warehouse desde el checkout, separar cargas analíticas de la API operacional, anonimizar datos sensibles y definir indicadores con el docente antes de construir el dashboard final.
@@ -43,3 +45,4 @@ La base transaccional ya conserva el precio congelado y el historial necesario p
 | Fecha | Observación | Ajuste |
 | --- | --- | --- |
 | 2026-10-09 | Primera propuesta | Pendiente de revisión docente. |
+| 2026-10-10 | Panel administrativo inicial | Se implementó dashboard operativo y CRUD de productos; queda validar indicadores con el docente. |
