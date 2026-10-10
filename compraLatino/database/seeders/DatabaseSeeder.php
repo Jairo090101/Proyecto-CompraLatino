@@ -15,11 +15,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $this->call(CatalogSeeder::class);
 
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'Administrador',
+            'email' => 'admin@compralatino.test',
+            'password' => 'Admin12345',
+            'role' => 'admin',
+            'country' => 'MX',
         ]);
+
+        User::factory(5)->create();
     }
 }
