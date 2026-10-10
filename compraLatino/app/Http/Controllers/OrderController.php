@@ -14,28 +14,34 @@ class OrderController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        return response()->json($request->user()->orders()->with('items')->latest()->paginate(20));
+        return response()->json($request->user()->orders()->with('items.product:id,image')->latest()->paginate(20));
     }
 
     public function show(Request $request, Order $order): JsonResponse
     {
         abort_unless($order->user_id === $request->user()->id, 404);
 
-        return response()->json($order->load('items'));
+        return response()->json($order->load('items.product:id,image'));
     }
 
     public function store(StoreOrderRequest $request, YAuctionsGateway $gateway): JsonResponse
     {
         $idempotencyKey = $request->header('Idempotency-Key');
         if ($idempotencyKey && ($existing = Order::where('idempotency_key', $idempotencyKey)->first())) {
-            return response()->json($existing->load('items'));
+            return response()->json($existing->load('items.product:id,image'));
         }
 
         $order = DB::transaction(function () use ($request, $idempotencyKey): Order {
             $products = Product::whereIn('id', collect($request->validated('items'))->pluck('product_id'))->get()->keyBy('id');
+            abort_if(
+                $products->contains(fn (Product $product): bool => $product->status === 'agotado'),
+                422,
+                'Uno de los productos seleccionados ya no está disponible.',
+            );
             $lines = collect($request->validated('items'))->map(function (array $item) use ($products): array {
                 $product = $products[$item['product_id']];
                 $lineTotal = (float) $product->price_usd * $item['quantity'];
+
                 return compact('product', 'item', 'lineTotal');
             });
             $subtotal = $lines->sum('lineTotal');
@@ -54,16 +60,17 @@ class OrderController extends Controller
                 'line_total' => $line['lineTotal'],
                 'product_name' => $line['product']->name,
             ])->all());
+
             return $order;
         });
 
         try {
-            $purchase = $gateway->placePurchase($order->load('items'));
+            $purchase = $gateway->placePurchase($order->load('items.product:id,image'));
             $order->update(['status' => $purchase['status'], 'yauctions_reference' => $purchase['reference']]);
         } catch (\Throwable) {
             $order->update(['status' => 'failed']);
         }
 
-        return response()->json($order->fresh('items'), 201);
+        return response()->json($order->fresh('items.product:id,image'), 201);
     }
 }

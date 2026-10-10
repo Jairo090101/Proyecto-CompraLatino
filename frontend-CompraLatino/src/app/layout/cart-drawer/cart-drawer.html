@@ -23,7 +23,13 @@
   @if (items().length) {
     <div class="drawer__body">
       @for (item of items(); track item.productId) {
-        <app-cart-line [item]="item" removable (remove)="removeItem($event)" />
+        <app-cart-line
+          [item]="item"
+          removable
+          editable
+          (remove)="removeItem($event)"
+          (quantityChange)="updateQuantity(item.productId, $event)"
+        />
       }
     </div>
 

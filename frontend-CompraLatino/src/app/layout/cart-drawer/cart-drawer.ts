@@ -65,6 +65,10 @@ export class CartDrawer {
     this.cart.remove(productId);
   }
 
+  updateQuantity(productId: number, quantity: number): void {
+    this.cart.updateQuantity(productId, quantity);
+  }
+
   clearCart(): void {
     this.cart.clear();
   }

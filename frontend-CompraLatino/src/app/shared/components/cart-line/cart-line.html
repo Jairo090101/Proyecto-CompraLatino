@@ -3,7 +3,15 @@
 
   <div class="line__info">
     <h3 class="line__name">{{ item().name }}</h3>
-    <span class="line__qty">Cant: {{ item().quantity }}</span>
+    @if (editable()) {
+      <app-quantity-stepper
+        class="line__stepper"
+        [value]="item().quantity"
+        (valueChange)="quantityChange.emit($event)"
+      />
+    } @else {
+      <span class="line__qty">Cant: {{ item().quantity }}</span>
+    }
     <span class="line__price">{{ item().priceUsd * item().quantity | currency: 'USD' : 'symbol' : '1.0-2' }} USD</span>
   </div>
 

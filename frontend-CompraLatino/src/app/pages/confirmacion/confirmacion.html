@@ -1,16 +1,53 @@
-<main class="container">
-  <h1>Confirmar compra</h1>
-  @if (error) { <p>{{ error }}</p> }
+<main class="container checkout">
+  <header class="checkout__header">
+    <span class="eyebrow">Compra segura</span>
+    <h1>Confirmar compra</h1>
+    <p>Revisa tus productos antes de enviarlos a YAuctions.</p>
+  </header>
+
+  @if (error()) {
+    <div class="checkout__error" role="alert">{{ error() }}</div>
+  }
+
   @if (cart.items().length) {
-    <ul>
-      @for (item of cart.items(); track item.productId) {
-        <li>{{ item.name }} × {{ item.quantity }} — {{ item.priceUsd * item.quantity | currency:'USD' }}</li>
-      }
-    </ul>
-    <p>Total estimado: {{ cart.subtotal() * 1.1 | currency:'USD' }}</p>
-    <button class="btn btn-primary" type="button" (click)="submit()">Enviar pedido</button>
+    <div class="checkout__grid">
+      <section class="checkout__items surface" aria-labelledby="items-title">
+        <div class="checkout__section-heading">
+          <h2 id="items-title">Tus productos</h2>
+          <span>{{ cart.count() }} artículos</span>
+        </div>
+        <div class="checkout__lines">
+          @for (item of cart.items(); track item.productId) {
+            <app-cart-line
+              [item]="item"
+              editable
+              removable
+              (remove)="cart.remove($event)"
+              (quantityChange)="updateQuantity(item.productId, $event)"
+            />
+          }
+        </div>
+        <a class="checkout__back" routerLink="/catalogo">← Seguir comprando</a>
+      </section>
+
+      <aside class="checkout__summary surface">
+        <h2>Resumen del pedido</h2>
+        <dl>
+          <div><dt>Subtotal YAuctions</dt><dd>{{ totals().base | currency:'USD':'symbol':'1.2-2' }}</dd></div>
+          <div><dt>Comisión intermediario ({{ commissionPercent }}%)</dt><dd>{{ totals().commission | currency:'USD':'symbol':'1.2-2' }}</dd></div>
+          <div class="checkout__total"><dt>Total estimado</dt><dd>{{ totals().total | currency:'USD':'symbol':'1.2-2' }}</dd></div>
+        </dl>
+        <p class="checkout__note">El importe final se calcula con el precio vigente al crear el pedido.</p>
+        <button class="btn btn-primary btn-block" type="button" [disabled]="loading()" (click)="submit()">
+          {{ loading() ? 'Enviando pedido...' : 'Confirmar compra' }}
+        </button>
+      </aside>
+    </div>
   } @else {
-    <p>Tu carrito está vacío.</p>
-    <a routerLink="/catalogo">Explorar catálogo</a>
+    <section class="checkout__empty surface">
+      <h2>Tu carrito está vacío</h2>
+      <p class="text-muted">Agrega productos del catálogo para comenzar.</p>
+      <a class="btn btn-primary" routerLink="/catalogo">Explorar catálogo</a>
+    </section>
   }
 </main>

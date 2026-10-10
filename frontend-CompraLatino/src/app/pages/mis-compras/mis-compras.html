@@ -1,14 +1,78 @@
-<main class="container">
-  <h1>Mis compras</h1>
-  @for (order of data; track order.id) {
-    <article>
-      <h2>Pedido #{{ order.id }} · {{ order.status }}</h2>
-      <p>Total: {{ order.total | currency:'USD' }}</p>
-      <ul>
-        @for (item of order.items; track item.product_name) {
-          <li>{{ item.product_name }} × {{ item.quantity }}</li>
-        }
-      </ul>
-    </article>
-  } @empty { <p>Aún no tienes compras.</p> }
+<main class="container purchases">
+  <header class="purchases__header">
+    <div>
+      <span class="eyebrow">Tu historial</span>
+      <h1>Mis compras</h1>
+      <p>Consulta el estado de tus pedidos enviados desde Japón.</p>
+    </div>
+    @if (!loading && !error) {
+      <span class="purchases__count">{{ data.length }} {{ data.length === 1 ? 'pedido' : 'pedidos' }}</span>
+    }
+  </header>
+
+  @if (loading) {
+    <div class="purchases__loading" aria-label="Cargando compras">
+      @for (placeholder of [1, 2]; track placeholder) {
+        <div class="purchase-card purchase-card--skeleton"></div>
+      }
+    </div>
+  } @else if (error) {
+    <section class="purchases__empty surface">
+      <h2>No pudimos cargar tus compras</h2>
+      <p class="text-muted">{{ error }}</p>
+      <button class="btn btn-primary" type="button" (click)="load()">Reintentar</button>
+    </section>
+  } @else if (data.length) {
+    <div class="purchases__list">
+      @for (order of data; track order.id) {
+        <article class="purchase-card surface" [class.purchase-card--highlight]="order.id === highlightedId">
+          <header class="purchase-card__header">
+            <div>
+              <span class="purchase-card__eyebrow">Pedido #{{ order.id }}</span>
+              <h2>{{ order.created_at | date:'d MMM y, HH:mm' }}</h2>
+            </div>
+            <span class="badge" [class]="statusClass(order.status)">{{ statusLabel(order.status) }}</span>
+          </header>
+
+          @if (order.yauctions_reference) {
+            <p class="purchase-card__reference">Referencia YAuctions: <strong>{{ order.yauctions_reference }}</strong></p>
+          }
+
+          <div class="purchase-card__items">
+            @for (item of order.items; track item.product_name) {
+              <div class="purchase-card__item">
+                @if (item.product?.image) {
+                  <img [src]="item.product?.image ?? ''" [alt]="item.product_name">
+                } @else {
+                  <div class="purchase-card__placeholder" aria-hidden="true"></div>
+                }
+                <div>
+                  <h3>{{ item.product_name }}</h3>
+                  <span>{{ item.quantity }} {{ item.quantity === 1 ? 'unidad' : 'unidades' }}</span>
+                </div>
+                <strong>{{ item.line_total | currency:'USD':'symbol':'1.2-2' }}</strong>
+              </div>
+            }
+          </div>
+
+          @if (order.status === 'failed') {
+            <p class="purchase-card__warning" role="status">No se pudo completar el envío a YAuctions.</p>
+          }
+
+          <footer class="purchase-card__footer">
+            <div><span>Subtotal</span><strong>{{ order.subtotal | currency:'USD':'symbol':'1.2-2' }}</strong></div>
+            <div><span>Comisión</span><strong>{{ order.commission | currency:'USD':'symbol':'1.2-2' }}</strong></div>
+            <div class="purchase-card__total"><span>Total</span><strong>{{ order.total | currency:'USD':'symbol':'1.2-2' }}</strong></div>
+          </footer>
+        </article>
+      }
+    </div>
+  } @else {
+    <section class="purchases__empty surface">
+      <div class="purchases__empty-icon" aria-hidden="true">◌</div>
+      <h2>Aún no tienes compras</h2>
+      <p class="text-muted">Cuando confirmes un pedido aparecerá aquí.</p>
+      <a class="btn btn-primary" routerLink="/catalogo">Explorar catálogo</a>
+    </section>
+  }
 </main>
