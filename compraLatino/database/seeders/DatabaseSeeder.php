@@ -15,6 +15,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call(CatalogSeeder::class);
+
         User::factory()->create([
             'name' => 'Administrador',
             'email' => 'admin@compralatino.test',
