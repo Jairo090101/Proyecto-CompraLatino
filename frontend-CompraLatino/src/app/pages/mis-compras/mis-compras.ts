@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { OrdersService, Order } from '../../services/orders.service';
@@ -12,9 +12,9 @@ import { OrdersService, Order } from '../../services/orders.service';
 export class MisCompras {
   readonly orders = inject(OrdersService);
   private readonly route = inject(ActivatedRoute);
-  data: Order[] = [];
-  loading = true;
-  error = '';
+  readonly data = signal<Order[]>([]);
+  readonly loading = signal(true);
+  readonly error = signal('');
   readonly highlightedId = Number(this.route.snapshot.queryParamMap.get('nuevo'));
 
   ngOnInit(): void {
@@ -22,15 +22,15 @@ export class MisCompras {
   }
 
   load(): void {
-    this.loading = true;
-    this.error = '';
+    this.loading.set(true);
+    this.error.set('');
     this.orders.list().subscribe({
-      next: (response) => this.data = response.data,
+      next: (response) => this.data.set(response.data),
       error: () => {
-        this.error = 'No se pudieron cargar tus compras. Intenta nuevamente.';
-        this.loading = false;
+        this.error.set('No se pudieron cargar tus compras. Intenta nuevamente.');
+        this.loading.set(false);
       },
-      complete: () => this.loading = false,
+      complete: () => this.loading.set(false),
     });
   }
 
