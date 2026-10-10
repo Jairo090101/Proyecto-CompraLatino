@@ -4,7 +4,8 @@ import { Observable, catchError, map, of, tap } from 'rxjs';
 
 import { User } from '../models/user.model';
 
-const API_URL = 'http://localhost:8000/api';
+import { API_URL } from './api.config';
+
 const TOKEN_KEY = 'compralatino.auth_token';
 
 interface AuthResponse { user: User; token: string; token_type: string; }
@@ -44,5 +45,3 @@ export class AuthService {
   clear(): void { localStorage.removeItem(TOKEN_KEY); this.userState.set(null); }
   private accept(response: AuthResponse): void { localStorage.setItem(TOKEN_KEY, response.token); this.userState.set(response.user); }
 }
-
-export { API_URL };
