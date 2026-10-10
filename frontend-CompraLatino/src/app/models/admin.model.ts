@@ -15,6 +15,19 @@ export interface AdminProduct {
   featured: boolean;
 }
 
+export interface AdminProductPayload {
+  category_id: string;
+  name: string;
+  description: string;
+  price_usd: number;
+  original_price_usd: number | null;
+  status: AdminProduct['status'];
+  image: string;
+  condition: string;
+  yauctions_item_id: string;
+  featured: boolean;
+}
+
 export interface AdminMetrics {
   totals: {
     sales: number;
