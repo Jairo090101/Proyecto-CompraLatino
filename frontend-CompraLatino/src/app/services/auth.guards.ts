@@ -7,8 +7,11 @@ import { AuthService } from './auth.service';
 export const authGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
   const router = inject(Router);
+  const currentUrl = router.url;
   return auth.ensureSessionReady().pipe(
-    map(() => auth.isLoggedIn() ? true : router.createUrlTree(['/login'])),
+    map(() => auth.isLoggedIn() ? true : router.createUrlTree(['/login'], {
+      queryParams: currentUrl !== '/' ? { returnUrl: currentUrl } : undefined,
+    })),
   );
 };
 

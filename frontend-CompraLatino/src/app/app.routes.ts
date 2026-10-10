@@ -24,12 +24,22 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/detalle-producto/detalle-producto').then((m) => m.DetalleProducto),
       },
+      {
+        path: 'confirmacion',
+        title: 'Confirmar compra | CompraLatino',
+        canActivate: [authGuard],
+        loadComponent: () => import('./pages/confirmacion/confirmacion').then((m) => m.Confirmacion),
+      },
+      {
+        path: 'mis-compras',
+        title: 'Mis compras | CompraLatino',
+        canActivate: [authGuard],
+        loadComponent: () => import('./pages/mis-compras/mis-compras').then((m) => m.MisCompras),
+      },
     ],
   },
   { path: 'login', canActivate: [guestGuard], loadComponent: () => import('./pages/login/login').then((m) => m.Login) },
   { path: 'registro', canActivate: [guestGuard], loadComponent: () => import('./pages/registro/registro').then((m) => m.Registro) },
-  { path: 'confirmacion', canActivate: [authGuard], loadComponent: () => import('./pages/confirmacion/confirmacion').then((m) => m.Confirmacion) },
-  { path: 'mis-compras', canActivate: [authGuard], loadComponent: () => import('./pages/mis-compras/mis-compras').then((m) => m.MisCompras) },
   { path: 'admin', canActivate: [authGuard, adminGuard], loadComponent: () => import('./pages/admin/admin').then((m) => m.Admin) },
   // Screens not implemented yet fall back to the home page.
   { path: '**', redirectTo: '' },
