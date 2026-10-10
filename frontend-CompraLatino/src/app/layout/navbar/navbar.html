@@ -38,7 +38,12 @@
           <span class="navbar__count">{{ cartCount() > 99 ? '99+' : cartCount() }}</span>
         }
       </button>
-      <a class="btn btn-primary navbar__login" routerLink="/login" (click)="closeMenu()">Ingresar</a>
+      @if (auth.user(); as user) {
+        <span>{{ user.name }}</span>
+        <button class="btn btn-primary navbar__login" type="button" (click)="logout()">Salir</button>
+      } @else {
+        <a class="btn btn-primary navbar__login" routerLink="/login" (click)="closeMenu()">Ingresar</a>
+      }
 
       <button
         type="button"
