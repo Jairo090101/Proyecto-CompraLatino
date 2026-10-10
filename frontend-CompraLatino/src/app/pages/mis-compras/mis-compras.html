@@ -1,0 +1,38 @@
+<section class="orders">
+  <div class="container">
+    <header class="orders__header">
+      <p class="eyebrow">Tu cuenta</p>
+      <h1>Mis compras</h1>
+      <p class="text-muted">Pedidos pagados con {{ email() }}.</p>
+    </header>
+
+    @if (orders().length) {
+      <ul class="orders__list">
+        @for (order of orders(); track order.id) {
+          <li class="surface orders__card">
+            <div class="orders__meta">
+              <strong>{{ order.id }}</strong>
+              <span class="text-muted">{{ formatDate(order.createdAt) }}</span>
+              <span class="orders__total">{{ order.total | currency: 'USD' : 'symbol' : '1.2-2' }} USD</span>
+            </div>
+            <ul class="orders__lines">
+              @for (line of order.lines; track line.name) {
+                <li>
+                  <img class="orders__img" appImgFallback [src]="line.image" [alt]="line.name" />
+                  <span>{{ line.name }}</span>
+                  <span class="text-muted">×{{ line.quantity }}</span>
+                </li>
+              }
+            </ul>
+          </li>
+        }
+      </ul>
+    } @else {
+      <div class="orders__empty surface">
+        <h2>Todavía no hay compras</h2>
+        <p class="text-muted">Cuando pagues con la sesión iniciada, el pedido aparecerá aquí.</p>
+        <a class="btn btn-primary" routerLink="/catalogo">Ir al catálogo</a>
+      </div>
+    }
+  </div>
+</section>

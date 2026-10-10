@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { MainLayout } from './layout/main-layout/main-layout';
+import { authGuard } from './services/auth.service';
 
 export const routes: Routes = [
   {
@@ -22,6 +23,17 @@ export const routes: Routes = [
         title: 'Detalle del producto | CompraLatino',
         loadComponent: () =>
           import('./pages/detalle-producto/detalle-producto').then((m) => m.DetalleProducto),
+      },
+      {
+        path: 'login',
+        title: 'Ingresar | CompraLatino',
+        loadComponent: () => import('./pages/login/login').then((m) => m.Login),
+      },
+      {
+        path: 'mis-compras',
+        title: 'Mis compras | CompraLatino',
+        canActivate: [authGuard],
+        loadComponent: () => import('./pages/mis-compras/mis-compras').then((m) => m.MisCompras),
       },
     ],
   },
