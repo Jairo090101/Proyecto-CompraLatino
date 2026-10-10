@@ -11,21 +11,26 @@ class DatabaseSeeder extends Seeder
     use WithoutModelEvents;
 
     /**
-     * Seed the application's database.
+     * Seed the application's database. Must be idempotent: it runs on every deploy.
      */
     public function run(): void
     {
         $this->call(CatalogSeeder::class);
 
-        User::factory()->create([
-            'name' => 'Administrador',
-            'email' => 'admin@compralatino.test',
-            'password' => 'Admin12345',
-            'role' => 'admin',
-            'country' => 'MX',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'admin@compralatino.test'],
+            [
+                'name' => 'Administrador',
+                'password' => 'Admin12345',
+                'role' => 'admin',
+                'country' => 'MX',
+            ]
+        );
 
-        User::factory(5)->create();
+        if (! User::where('email', '!=', 'admin@compralatino.test')->exists()) {
+            User::factory(5)->create();
+        }
+
         $this->call(OrderSeeder::class);
     }
 }
