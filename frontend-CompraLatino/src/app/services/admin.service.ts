@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { AdminMetrics, AdminProduct, AdminProductPage } from '../models/admin.model';
+import { AdminMetrics, AdminProduct, AdminProductPage, AdminProductPayload } from '../models/admin.model';
 import { API_URL } from './api.config';
 
 @Injectable({ providedIn: 'root' })
@@ -18,11 +18,11 @@ export class AdminService {
     return this.http.get<AdminProductPage>(`${API_URL}/admin/products`, { params });
   }
 
-  createProduct(product: Partial<AdminProduct>): Observable<AdminProduct> {
+  createProduct(product: AdminProductPayload): Observable<AdminProduct> {
     return this.http.post<AdminProduct>(`${API_URL}/admin/products`, product);
   }
 
-  updateProduct(id: number, product: Partial<AdminProduct>): Observable<AdminProduct> {
+  updateProduct(id: number, product: AdminProductPayload): Observable<AdminProduct> {
     return this.http.put<AdminProduct>(`${API_URL}/admin/products/${id}`, product);
   }
 
