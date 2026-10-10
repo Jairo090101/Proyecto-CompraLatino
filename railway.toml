@@ -1,0 +1,3 @@
+[deploy]
+# Misma orden que compraLatino/railway.toml, para cuando el servicio usa la raíz del repositorio.
+preDeployCommand = "php compraLatino/artisan migrate --force --no-interaction && php compraLatino/artisan db:seed --force --no-interaction"

@@ -1,0 +1,3 @@
+[deploy]
+# Crea las tablas y, después, las cuentas de demostración. --force evita la confirmación en producción.
+preDeployCommand = "php artisan migrate --force --no-interaction && php artisan db:seed --force --no-interaction"
