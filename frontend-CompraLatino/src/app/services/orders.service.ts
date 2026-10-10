@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { API_URL } from './auth.service';
+import { API_URL } from './api.config';
 
 export interface Order {
   id: number; status: string; subtotal: string; commission: string; total: string;
