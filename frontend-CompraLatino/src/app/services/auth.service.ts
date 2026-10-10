@@ -1,6 +1,6 @@
 import { Injectable, computed, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, of, tap } from 'rxjs';
+import { Observable, catchError, map, of, tap } from 'rxjs';
 
 import { User } from '../models/user.model';
 
@@ -31,6 +31,7 @@ export class AuthService {
     if (!token) return of(null);
     return this.http.get<{ data: User }>(`${API_URL}/auth/me`).pipe(
       tap((response) => this.userState.set(response.data)),
+      map((response) => response.data),
       catchError(() => { this.clear(); return of(null); }),
     );
   }
