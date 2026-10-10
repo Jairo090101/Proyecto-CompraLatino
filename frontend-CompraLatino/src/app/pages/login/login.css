@@ -1,0 +1,5 @@
+.auth-page { min-height: 70vh; display: grid; place-items: center; padding: 3rem 1rem; }
+.auth-card { display: grid; gap: 1rem; width: min(100%, 28rem); padding: 2rem; border: 1px solid #ddd; border-radius: 1rem; }
+.auth-card label { display: grid; gap: .35rem; }
+.auth-card input { padding: .7rem; border: 1px solid #bbb; border-radius: .4rem; }
+.error { color: #a00; }

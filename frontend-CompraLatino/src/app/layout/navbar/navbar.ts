@@ -3,6 +3,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 
 import { CartDrawerService } from '../../services/cart-drawer.service';
 import { CartService } from '../../services/cart.service';
+import { AuthService } from '../../services/auth.service';
 
 interface NavLink {
   label: string;
@@ -21,7 +22,7 @@ export class Navbar {
   protected readonly links: NavLink[] = [
     { label: 'Inicio', path: '/', exact: true },
     { label: 'Catálogo', path: '/catalogo' },
-    { label: 'Mis Compras', path: '/historial' },
+    { label: 'Mis Compras', path: '/mis-compras' },
     { label: 'Admin', path: '/admin' },
   ];
 
@@ -29,6 +30,7 @@ export class Navbar {
 
   protected readonly cartCount = inject(CartService).count;
   protected readonly menuOpen = signal(false);
+  protected readonly auth = inject(AuthService);
 
   openCart(): void {
     this.closeMenu();
@@ -41,5 +43,10 @@ export class Navbar {
 
   closeMenu(): void {
     this.menuOpen.set(false);
+  }
+
+  logout(): void {
+    this.auth.logout().subscribe();
+    this.closeMenu();
   }
 }

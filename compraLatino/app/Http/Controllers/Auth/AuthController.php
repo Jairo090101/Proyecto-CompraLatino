@@ -16,7 +16,10 @@ class AuthController extends Controller
 {
     public function register(RegisterRequest $request): JsonResponse
     {
-        $user = User::create($request->safe()->only(['name', 'email', 'password']));
+        $user = User::create([
+            ...$request->safe()->only(['name', 'email', 'password']),
+            'role' => 'customer',
+        ]);
 
         return $this->tokenResponse($user, 201);
     }
@@ -44,6 +47,19 @@ class AuthController extends Controller
     public function me(Request $request): UserResource
     {
         return new UserResource($request->user());
+    }
+
+    public function updateProfile(Request $request): UserResource
+    {
+        $validated = $request->validate([
+            'name' => ['sometimes', 'required', 'string', 'max:255'],
+            'phone' => ['sometimes', 'nullable', 'string', 'max:30'],
+            'country' => ['sometimes', 'nullable', 'string', 'size:2'],
+        ]);
+
+        $request->user()->update($validated);
+
+        return new UserResource($request->user()->fresh());
     }
 
     private function tokenResponse(User $user, int $status = 200): JsonResponse

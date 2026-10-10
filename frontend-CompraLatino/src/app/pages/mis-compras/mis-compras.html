@@ -1,0 +1,14 @@
+<main class="container">
+  <h1>Mis compras</h1>
+  @for (order of data; track order.id) {
+    <article>
+      <h2>Pedido #{{ order.id }} · {{ order.status }}</h2>
+      <p>Total: {{ order.total | currency:'USD' }}</p>
+      <ul>
+        @for (item of order.items; track item.product_name) {
+          <li>{{ item.product_name }} × {{ item.quantity }}</li>
+        }
+      </ul>
+    </article>
+  } @empty { <p>Aún no tienes compras.</p> }
+</main>
