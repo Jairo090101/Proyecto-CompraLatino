@@ -1,0 +1,16 @@
+<main class="container">
+  <h1>Confirmar compra</h1>
+  @if (error) { <p>{{ error }}</p> }
+  @if (cart.items().length) {
+    <ul>
+      @for (item of cart.items(); track item.productId) {
+        <li>{{ item.name }} × {{ item.quantity }} — {{ item.priceUsd * item.quantity | currency:'USD' }}</li>
+      }
+    </ul>
+    <p>Total estimado: {{ cart.subtotal() * 1.1 | currency:'USD' }}</p>
+    <button class="btn btn-primary" type="button" (click)="submit()">Enviar pedido</button>
+  } @else {
+    <p>Tu carrito está vacío.</p>
+    <a routerLink="/catalogo">Explorar catálogo</a>
+  }
+</main>
