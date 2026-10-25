@@ -1,0 +1,59 @@
+<div class="admin">
+  <aside class="admin__side">
+    <p class="eyebrow">Panel administrativo</p>
+    <p class="admin__version">CompraLatino v2.4</p>
+
+    <nav class="admin__nav" aria-label="Secciones de administración">
+      @for (link of links; track link.path) {
+        <a
+          class="admin__link"
+          [routerLink]="link.path"
+          routerLinkActive="admin__link--active"
+          [routerLinkActiveOptions]="{ exact: !!link.exact }"
+        >
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            @switch (link.icon) {
+              @case ('dashboard') { <path d="M3 3h7v7H3zM14 3h7v4h-7zM14 10h7v11h-7zM3 13h7v8H3z" /> }
+              @case ('users') { <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="3" /><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" /> }
+              @case ('box') { <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" /><path d="M3.3 7 12 12l8.7-5M12 22V12" /> }
+              @case ('cart') { <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" /> }
+              @case ('chart') { <path d="M3 3v18h18" /><path d="m7 14 4-4 3 3 5-6" /> }
+            }
+          </svg>
+          {{ link.label }}
+        </a>
+      }
+    </nav>
+
+    <div class="admin__profile">
+      <span class="admin__avatar" aria-hidden="true">{{ initial() }}</span>
+      <div>
+        <strong>{{ account().name }}</strong>
+        <span class="text-muted">{{ account().email }}</span>
+        <span class="badge">{{ account().role }}</span>
+      </div>
+    </div>
+  </aside>
+
+  <div class="admin__main">
+    <router-outlet />
+
+    <footer class="admin-footer">
+      <a class="admin-footer__brand" routerLink="/">Compra<span class="text-primary">Latino</span></a>
+      <div>
+        <h2>Navegación</h2>
+        <a routerLink="/">Inicio</a>
+        <a routerLink="/catalogo">Catálogo</a>
+        <a routerLink="/historial">Mis Compras</a>
+      </div>
+      <div>
+        <h2>Países disponibles</h2>
+        <p>México, Colombia, Argentina, Perú, Chile, Ecuador y Guatemala.</p>
+      </div>
+      <div>
+        <h2>Contacto</h2>
+        <p>{{ account().email }}</p>
+      </div>
+    </footer>
+  </div>
+</div>

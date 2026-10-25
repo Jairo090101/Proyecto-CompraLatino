@@ -1,0 +1,32 @@
+<header class="admin-page__head">
+  <div>
+    <h1>Reportes</h1>
+    <p class="text-muted">Análisis y métricas de la plataforma · Septiembre 2026</p>
+  </div>
+</header>
+
+<section class="admin-kpis" aria-label="Métricas de septiembre">
+  <app-kpi-card class="surface" label="GMV total Sep" value="$284,500 USD" hint="Valor bruto de mercancía" icon="coin" />
+  <app-kpi-card class="surface" label="Comisiones generadas" value="$28,450 USD" hint="10% sobre GMV" tone="danger" icon="chart" />
+  <app-kpi-card class="surface" label="Ticket promedio" value="$832 USD" hint="Por orden procesada" icon="box" />
+  <app-kpi-card class="surface" label="NPS Score" value="72/100" hint="Net Promoter Score" icon="users" />
+</section>
+
+<section class="reports" aria-label="Informes descargables">
+  @for (report of reports; track report.id) {
+    <article class="surface report">
+      <h2>{{ report.title }}</h2>
+      <p>{{ report.description }}</p>
+      <div class="report__actions">
+        <span class="text-muted">{{ report.period }}</span>
+        <button type="button" class="btn btn-outline btn-small" [attr.aria-expanded]="openId() === report.id" (click)="toggle(report.id)">
+          Ver
+        </button>
+        <button type="button" class="btn btn-primary btn-small" (click)="exportReport(report.id)">CSV</button>
+      </div>
+      @if (openId() === report.id) {
+        <p class="report__summary">{{ report.summary }}</p>
+      }
+    </article>
+  }
+</section>

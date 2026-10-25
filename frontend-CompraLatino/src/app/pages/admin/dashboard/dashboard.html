@@ -1,0 +1,80 @@
+<header class="admin-page__head">
+  <div>
+    <h1>Dashboard</h1>
+    <p class="text-muted">{{ period }} — Vista general de la plataforma</p>
+  </div>
+</header>
+
+<section class="admin-kpis" aria-label="Indicadores de septiembre">
+  <app-kpi-card class="surface" label="Ventas totales (Sep)" value="$284,500" hint="MXN" trend="18.3% vs mes anterior" icon="coin" />
+  <app-kpi-card class="surface" label="Usuarios activos" value="1,284" hint="registrados" trend="7.2% vs mes anterior" icon="users" />
+  <app-kpi-card class="surface" label="Órdenes del mes" value="342" hint="órdenes" trend="12.5% vs mes anterior" icon="box" />
+  <app-kpi-card class="surface" label="Conversión" value="4.7%" hint="de visitas" trend="0.3% vs mes anterior" [trendUp]="false" icon="chart" />
+</section>
+
+<section class="surface chart" aria-labelledby="orders-chart-title">
+  <div class="section-head">
+    <h2 id="orders-chart-title">Órdenes por mes</h2>
+    <span class="text-muted">Abr–Sep 2026</span>
+  </div>
+  <ul class="bars">
+    @for (month of months; track month.month; let last = $last) {
+      <li>
+        <span class="bars__value">{{ month.orders }}</span>
+        <span class="bars__col" [class.bars__col--current]="last" [style.height.%]="(month.orders / maxOrders) * 100"></span>
+        <span class="bars__label">{{ month.month }}</span>
+      </li>
+    }
+  </ul>
+</section>
+
+<section class="surface categories" aria-labelledby="category-title">
+  <h2 id="category-title">Por categoría</h2>
+  <ul>
+    @for (category of categories; track category.name) {
+      <li>
+        <div class="categories__head">
+          <span>{{ category.name }}</span>
+          <span>{{ category.orders }} órd.</span>
+        </div>
+        <div class="categories__track">
+          <span [style.width.%]="(category.orders / maxCategory) * 100" [style.background]="category.color"></span>
+        </div>
+      </li>
+    }
+  </ul>
+</section>
+
+<section class="surface recent" aria-labelledby="recent-title">
+  <div class="section-head">
+    <h2 id="recent-title">Órdenes recientes</h2>
+    <a routerLink="/admin/compras">Ver todas →</a>
+  </div>
+  <div class="data-table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th scope="col">Orden</th>
+          <th scope="col">Cliente</th>
+          <th scope="col">Producto</th>
+          <th scope="col">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (order of recent; track order.id) {
+          <tr>
+            <td>{{ order.id }}</td>
+            <td>
+              <span class="person">
+                <span class="country-code">{{ order.countryCode }}</span>
+                {{ order.customer }}
+              </span>
+            </td>
+            <td>{{ order.product }}</td>
+            <td class="text-primary">{{ money(order.totalMxn) }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

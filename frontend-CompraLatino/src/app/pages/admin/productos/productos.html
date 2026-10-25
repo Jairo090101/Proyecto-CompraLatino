@@ -1,0 +1,87 @@
+<header class="admin-page__head">
+  <div>
+    <h1>Productos</h1>
+    <p class="text-muted">Sincronizados desde YAuctions Japan</p>
+  </div>
+  <div class="admin-actions">
+    <button type="button" class="btn btn-outline" (click)="exportCsv()">Exportar</button>
+    <button type="button" class="btn btn-primary" (click)="sync()">
+      {{ synced() ? 'Sincronizado' : 'Sincronizar YAuctions' }}
+    </button>
+  </div>
+</header>
+
+<section class="admin-kpis" aria-label="Resumen de inventario">
+  <app-kpi-card class="surface" label="Total productos" [value]="'' + products.length" />
+  <app-kpi-card class="surface" label="Stock bajo / agotado" [value]="'' + lowOrOut" tone="warning" />
+  <app-kpi-card class="surface" label="Ventas este mes" [value]="'' + monthSales" tone="danger" />
+</section>
+
+<div class="admin-toolbar">
+  <label class="visually-hidden" for="product-search">Buscar productos</label>
+  <input
+    id="product-search"
+    class="form-control admin-search"
+    type="search"
+    placeholder="Buscar producto..."
+    [value]="query()"
+    (input)="onSearch($any($event.target).value)"
+  />
+  <div class="filters" role="group" aria-label="Filtrar por categoría">
+    <button type="button" class="chip" [class.chip--active]="!category()" (click)="category.set(null)">Todos</button>
+    @for (item of categories; track item) {
+      <button type="button" class="chip" [class.chip--active]="category() === item" (click)="category.set(item)">
+        {{ item }}
+      </button>
+    }
+  </div>
+</div>
+
+<div class="surface data-table-wrap">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th scope="col">Producto</th>
+        <th scope="col">Categoría</th>
+        <th scope="col">Precio (MXN)</th>
+        <th scope="col">Stock</th>
+        <th scope="col">Ventas</th>
+        <th scope="col">Estado</th>
+        <th scope="col"><span class="visually-hidden">Acciones</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (product of filtered(); track product.id) {
+        <tr>
+          <td>
+            <span class="person">
+              <img class="thumb" appImgFallback [src]="product.image" alt="" />
+              <span>
+                <strong>{{ product.name }}</strong>
+                <span class="text-muted">{{ product.id }}</span>
+              </span>
+            </span>
+          </td>
+          <td>{{ product.category }}</td>
+          <td class="text-primary">{{ money(product.priceMxn) }}</td>
+          <td>{{ product.stock }}</td>
+          <td>{{ product.sales }}</td>
+          <td>
+            @switch (stockState(product.stock)) {
+              @case ('agotado') { <span class="badge badge-danger">Agotado</span> }
+              @case ('bajo') { <span class="badge badge-warning">Stock bajo</span> }
+              @default { <span class="badge badge-success">Activo</span> }
+            }
+          </td>
+          <td>
+            <a class="btn btn-outline btn-small" [routerLink]="['/producto', product.catalogId]">Editar</a>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="7" class="empty-row">Ningún producto coincide con la búsqueda.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

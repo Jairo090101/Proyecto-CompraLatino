@@ -1,0 +1,66 @@
+:host {
+  display: block;
+}
+
+.kpi {
+  padding: 1rem 1.1rem;
+}
+
+.kpi__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.kpi__top h2 {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.kpi__icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-2);
+  color: var(--color-text-muted);
+}
+
+.kpi__value {
+  margin-top: 0.65rem;
+  font-size: 1.7rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.kpi__value--success {
+  color: var(--color-success);
+}
+
+.kpi__value--warning {
+  color: var(--color-warning);
+}
+
+.kpi__value--danger {
+  color: var(--color-primary);
+}
+
+.kpi__hint {
+  margin-top: 0.3rem;
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+}
+
+.kpi__trend {
+  margin-top: 0.55rem;
+  color: var(--color-success);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.kpi__trend--down {
+  color: var(--color-primary);
+}

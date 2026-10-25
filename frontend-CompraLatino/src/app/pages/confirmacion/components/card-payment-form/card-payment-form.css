@@ -1,0 +1,59 @@
+.card-form {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.card-form h2 {
+  font-size: 1.1rem;
+}
+
+.card-form label {
+  display: grid;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.card-form label span,
+.card-form__hint {
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+
+.card-form label span {
+  color: #ff8a9b;
+}
+
+.card-form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.card-form ul {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card-form ul button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+
+.card-form ul button:hover {
+  color: var(--color-primary);
+}
+
+.card-form button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
