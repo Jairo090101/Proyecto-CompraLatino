@@ -1,0 +1,88 @@
+<header class="admin-page__head">
+  <div>
+    <h1>Compras</h1>
+    <p class="text-muted">Todas las órdenes procesadas a través de YAuctions</p>
+  </div>
+  <button type="button" class="btn btn-outline" (click)="exportCsv()">Exportar CSV</button>
+</header>
+
+<section class="admin-kpis" aria-label="Resumen de compras">
+  <app-kpi-card class="surface" label="Total órdenes" [value]="'' + orders.length" />
+  <app-kpi-card class="surface" label="Entregadas" [value]="'' + delivered" tone="success" />
+  <app-kpi-card class="surface" label="En tránsito / proc." [value]="'' + moving" tone="warning" />
+  <app-kpi-card class="surface" label="Canceladas" [value]="'' + cancelled" tone="danger" />
+</section>
+
+<div class="admin-toolbar">
+  <label class="visually-hidden" for="order-search">Buscar órdenes</label>
+  <input
+    id="order-search"
+    class="form-control admin-search"
+    type="search"
+    placeholder="Buscar por orden, cliente o producto..."
+    [value]="query()"
+    (input)="onSearch($any($event.target).value)"
+  />
+  <div class="filters" role="group" aria-label="Filtrar por estado">
+    @for (filter of filters; track filter.id) {
+      <button type="button" class="chip" [class.chip--active]="status() === filter.id" (click)="status.set(filter.id)">
+        {{ filter.label }}
+      </button>
+    }
+  </div>
+</div>
+
+<div class="surface data-table-wrap">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th scope="col">Nº orden</th>
+        <th scope="col">Cliente</th>
+        <th scope="col">Producto</th>
+        <th scope="col">Fecha</th>
+        <th scope="col">Total</th>
+        <th scope="col">Estado</th>
+        <th scope="col"><span class="visually-hidden">Detalle</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (order of filtered(); track order.id) {
+        <tr>
+          <td>{{ order.id }}</td>
+          <td>
+            <span class="person">
+              <span class="country-code">{{ order.countryCode }}</span>
+              <span>
+                <strong>{{ order.customer }}</strong>
+                <span class="text-muted">{{ order.email }}</span>
+              </span>
+            </span>
+          </td>
+          <td>{{ order.product }}</td>
+          <td>{{ order.dateLabel }}</td>
+          <td class="text-primary">{{ money(order.totalMxn) }}</td>
+          <td>
+            <span [class]="statusClass(order.status)">{{ labels[order.status] }}</span>
+          </td>
+          <td>
+            <button type="button" class="btn btn-outline btn-small" [attr.aria-expanded]="openId() === order.id" (click)="toggle(order.id)">
+              Detalle
+            </button>
+          </td>
+        </tr>
+        @if (openId() === order.id) {
+          <tr>
+            <td colspan="7" class="detail-row">
+              {{ order.customer }} ({{ order.email }}) compró {{ order.product }} el {{ order.dateLabel }}.
+              Total {{ money(order.totalMxn) }} MXN · {{ labels[order.status] }}.
+            </td>
+          </tr>
+        }
+      } @empty {
+        <tr>
+          <td colspan="7" class="empty-row">Ninguna orden coincide con la búsqueda.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

@@ -2,7 +2,7 @@
   <header class="checkout__header">
     <span class="eyebrow">Compra segura</span>
     <h1>Confirmar compra</h1>
-    <p>Revisa tus productos antes de enviarlos a YAuctions.</p>
+    <p>Revisa el pedido y paga el total con tarjeta. El pedido se envía solo si el cargo es aprobado.</p>
   </header>
 
   @if (error()) {
@@ -37,10 +37,8 @@
           <div><dt>Comisión intermediario ({{ commissionPercent }}%)</dt><dd>{{ totals().commission | currency:'USD':'symbol':'1.2-2' }}</dd></div>
           <div class="checkout__total"><dt>Total estimado</dt><dd>{{ totals().total | currency:'USD':'symbol':'1.2-2' }}</dd></div>
         </dl>
-        <p class="checkout__note">El importe final se calcula con el precio vigente al crear el pedido.</p>
-        <button class="btn btn-primary btn-block" type="button" [disabled]="loading()" (click)="submit()">
-          {{ loading() ? 'Enviando pedido...' : 'Confirmar compra' }}
-        </button>
+        <p class="checkout__note">El importe final se calcula con el precio vigente al crear el pedido. El número de la tarjeta no se guarda.</p>
+        <app-card-payment-form [busy]="loading()" (pay)="pay($event)" />
       </aside>
     </div>
   } @else {

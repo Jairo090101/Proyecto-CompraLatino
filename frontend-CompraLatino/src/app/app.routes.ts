@@ -36,11 +36,42 @@ export const routes: Routes = [
         canActivate: [authGuard],
         loadComponent: () => import('./pages/mis-compras/mis-compras').then((m) => m.MisCompras),
       },
+      {
+        path: 'admin',
+        canActivate: [authGuard, adminGuard],
+        loadComponent: () => import('./pages/admin/admin-shell').then((m) => m.AdminShell),
+        children: [
+          {
+            path: '',
+            title: 'Dashboard | Admin CompraLatino',
+            loadComponent: () => import('./pages/admin/dashboard/dashboard').then((m) => m.AdminDashboard),
+          },
+          {
+            path: 'usuarios',
+            title: 'Usuarios | Admin CompraLatino',
+            loadComponent: () => import('./pages/admin/usuarios/usuarios').then((m) => m.AdminUsuarios),
+          },
+          {
+            path: 'productos',
+            title: 'Productos | Admin CompraLatino',
+            loadComponent: () => import('./pages/admin/productos/productos').then((m) => m.AdminProductos),
+          },
+          {
+            path: 'compras',
+            title: 'Compras | Admin CompraLatino',
+            loadComponent: () => import('./pages/admin/compras/compras').then((m) => m.AdminCompras),
+          },
+          {
+            path: 'reportes',
+            title: 'Reportes | Admin CompraLatino',
+            loadComponent: () => import('./pages/admin/reportes/reportes').then((m) => m.AdminReportes),
+          },
+        ],
+      },
     ],
   },
   { path: 'login', canActivate: [guestGuard], loadComponent: () => import('./pages/login/login').then((m) => m.Login) },
   { path: 'registro', canActivate: [guestGuard], loadComponent: () => import('./pages/registro/registro').then((m) => m.Registro) },
-  { path: 'admin', canActivate: [authGuard, adminGuard], loadComponent: () => import('./pages/admin/admin').then((m) => m.Admin) },
   // Screens not implemented yet fall back to the home page.
   { path: '**', redirectTo: '' },
 ];

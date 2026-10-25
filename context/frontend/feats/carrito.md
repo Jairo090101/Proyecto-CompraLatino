@@ -31,6 +31,6 @@ la derecha sobre cualquier pantalla. Datos en `CartService` (signals + localStor
 
 ## Pendientes / riesgos
 - No existe ruta `/carrito`; el requisito original la mencionaba, pero el diseno usa panel.
-- "Proceder al Pago" redirige a inicio hasta que exista `/confirmacion`.
+- "Proceder al Pago" abre `/confirmacion`, donde el cargo con tarjeta precede al pedido.
 - La cantidad se edita dentro del panel con el control `+/-`, limitado a 99 unidades;
   `CartService.updateQuantity` mantiene sincronizados el total y `localStorage`.

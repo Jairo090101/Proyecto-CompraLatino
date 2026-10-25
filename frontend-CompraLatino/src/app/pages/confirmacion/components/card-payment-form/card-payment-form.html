@@ -1,0 +1,46 @@
+<form class="card-form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  <h2>Pago con tarjeta</h2>
+  <label>
+    Titular
+    <input class="form-control" type="text" formControlName="holder" autocomplete="cc-name" [disabled]="busy()" />
+    @if (invalid('holder')) {
+      <span>Escribe el nombre del titular.</span>
+    }
+  </label>
+  <label>
+    Número
+    <input class="form-control" type="text" inputmode="numeric" autocomplete="cc-number" formControlName="number" [disabled]="busy()" (input)="onNumber($any($event.target).value)" />
+    @if (invalid('number')) {
+      <span>Revisa el número de la tarjeta.</span>
+    }
+  </label>
+  <div class="card-form__row">
+    <label>
+      Vencimiento
+      <input class="form-control" type="text" inputmode="numeric" placeholder="MM/AA" autocomplete="cc-exp" formControlName="expiry" [disabled]="busy()" (input)="onExpiry($any($event.target).value)" />
+      @if (invalid('expiry')) {
+        <span>Usa una fecha vigente.</span>
+      }
+    </label>
+    <label>
+      CVV
+      <input class="form-control" type="password" inputmode="numeric" autocomplete="cc-csc" formControlName="cvv" [disabled]="busy()" (input)="onCvv($any($event.target).value)" />
+      @if (invalid('cvv')) {
+        <span>CVV incompleto.</span>
+      }
+    </label>
+  </div>
+  <button class="btn btn-primary btn-block" type="submit" [disabled]="busy()">
+    {{ busy() ? 'Procesando pago...' : 'Pagar con tarjeta' }}
+  </button>
+  <p class="card-form__hint">Tarjetas de prueba. Vencimiento 12/30.</p>
+  <ul>
+    @for (card of testCards; track card.raw) {
+      <li>
+        <button type="button" [disabled]="busy()" (click)="applyDemo(card.raw, card.cvv)">
+          {{ card.number }} · {{ card.result }}
+        </button>
+      </li>
+    }
+  </ul>
+</form>

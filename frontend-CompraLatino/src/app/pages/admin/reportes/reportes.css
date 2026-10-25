@@ -1,0 +1,38 @@
+.reports {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.report {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 1.1rem;
+}
+
+.report h2 {
+  font-size: 1rem;
+}
+
+.report p {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.report__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+.report__actions .text-muted {
+  margin-right: auto;
+  font-size: 0.75rem;
+}
+
+.report__summary {
+  color: var(--color-text);
+}

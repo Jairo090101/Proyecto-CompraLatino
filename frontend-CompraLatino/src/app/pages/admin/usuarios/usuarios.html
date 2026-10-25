@@ -1,0 +1,72 @@
+<header class="admin-page__head">
+  <div>
+    <h1>Usuarios</h1>
+    <p class="text-muted">{{ users().length }} usuarios registrados en la plataforma</p>
+  </div>
+  <button type="button" class="btn btn-primary" (click)="exportCsv()">+ Exportar CSV</button>
+</header>
+
+<section class="admin-kpis" aria-label="Resumen de usuarios">
+  <app-kpi-card class="surface" label="Total usuarios" [value]="'' + users().length" />
+  <app-kpi-card class="surface" label="Usuarios activos" [value]="'' + activeCount()" tone="success" />
+  <app-kpi-card class="surface" label="Suspendidos" [value]="'' + suspendedCount()" tone="danger" />
+</section>
+
+<div class="admin-toolbar">
+  <label class="visually-hidden" for="user-search">Buscar usuarios</label>
+  <input
+    id="user-search"
+    class="form-control admin-search"
+    type="search"
+    placeholder="Buscar por nombre o email..."
+    [value]="query()"
+    (input)="onSearch($any($event.target).value)"
+  />
+  <div class="filters" role="group" aria-label="Filtrar por estado">
+    @for (filter of filters; track filter.id) {
+      <button type="button" class="chip" [class.chip--active]="status() === filter.id" (click)="status.set(filter.id)">
+        {{ filter.label }}
+      </button>
+    }
+  </div>
+</div>
+
+<div class="surface data-table-wrap">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Usuario</th>
+        <th scope="col">País</th>
+        <th scope="col">Órdenes</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (user of filtered(); track user.id) {
+        <tr>
+          <td class="text-muted">{{ user.id }}</td>
+          <td>
+            <span class="person">
+              <span class="avatar" [style.background]="user.color">{{ user.name.charAt(0) }}</span>
+              <span>
+                <strong>{{ user.name }}</strong>
+                <span class="text-muted">{{ user.email }}</span>
+              </span>
+            </span>
+          </td>
+          <td>
+            <span class="person">
+              <span class="country-code">{{ user.countryCode }}</span>
+              {{ user.country }}
+            </span>
+          </td>
+          <td>{{ user.orders }}</td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="4" class="empty-row">Ningún usuario coincide con la búsqueda.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
